@@ -1,3 +1,7 @@
+assembly: c-asm.c
+	@echo "Compiling assembly"
+	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld c-asm.c -S
+
 compile: m.s m.ld
 	riscv64-unknown-elf-gcc -O0 -ggdb -nostdlib -march=rv32i -mabi=ilp32 -Wl,-Tm.ld m.s -o main.elf
 	riscv64-unknown-elf-objcopy -O binary main.elf main.bin
@@ -12,4 +16,4 @@ connectgdb: main.elf
 	gdb-multiarch main.elf -ex "target remote localhost:1234" -ex "break _start" -ex "continue"
 
 clean:
-	rm -f *.elf *.bin *.d *.o
+	rm -f *.elf *.bin *.d *.o c-asm.s
